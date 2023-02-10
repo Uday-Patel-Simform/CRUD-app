@@ -184,11 +184,6 @@ const products_toggle = () => {
             else {
                 product_list.push(product);
                 localStorage.setItem('product_list', JSON.stringify(product_list));
-                // form data reset on successful form submission
-                form_data.reset();
-                click_event = e || window.e;
-                window.history.pushState({}, '', click_event.target.href);
-                changeLocation();
             }
         })
     }
@@ -225,6 +220,11 @@ const products_toggle = () => {
         // deciding which functionality to apply
         if (f_button.textContent == 'ADD Product') {
             add_product(product);
+                // form data reset on successful form submission
+                form_data.reset();
+                click_event = e || window.e;
+                window.history.pushState({}, '', click_event.target.href);
+                changeLocation();
         } else if (f_button.textContent == 'Save') {
             edit_product(productId, product);
             // form data reset on successful form submission
