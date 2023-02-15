@@ -241,27 +241,38 @@ const products_toggle = () => {
             description: description
         };
 
+        // checking for empty fields
+        const check_empty = (btn_txt) => {
+            if (!productId) {
+                pid.style.border = '1px solid red';
+            } else if (!productName) {
+                pname.style.border = '1px solid red';
+            } else if (!image && btn_txt == 'ADD Product') {
+                pimg.style.border = '1px solid red';
+            } else if (!price) {
+                pprice.style.border = '1px solid red';
+            } else if (!description) {
+                pdesc.style.border = '1px solid red';
+            } else {
+                return true;
+            }
+        }
         // deciding which functionality to apply
         if (f_button.textContent == 'ADD Product') {
-            // checking for empty fields
-            if (!productId || !productName || !image || !price || !description) {
-                alert("All fields are required");
-                return;
+            if (check_empty(f_button.textContent)) {
+                click_event = e || window.e;
+                add_product(product, click_event, image);
             }
-            click_event = e || window.e;
-            add_product(product, click_event, image);
+
         } else {
             edit_product(productId, product, image);
-            // checking for empty fields
-            if (!productId || !productName || !price || !description) {
-                alert("All fields are required");
-                return;
+            if (check_empty(f_button.textContent)) {
+                // form data reset on successful form submission
+                form_data.reset();
+                click_event = e || window.e;
+                window.history.pushState({}, '', click_event.target.href);
+                changeLocation();
             }
-            // form data reset on successful form submission
-            form_data.reset();
-            click_event = e || window.e;
-            window.history.pushState({}, '', click_event.target.href);
-            changeLocation();
         }
     });
 }
