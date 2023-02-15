@@ -243,16 +243,23 @@ const products_toggle = () => {
 
         // checking for empty fields
         const check_empty = (btn_txt) => {
+            let alert= document.querySelector('.alert');
+            alert.style='color: red';
             if (!productId) {
                 pid.style.border = '1px solid red';
+                alert.textContent = pid.previousElementSibling.textContent.slice(0,-1) +' is required*'
             } else if (!productName) {
                 pname.style.border = '1px solid red';
+                alert.textContent = pname.previousElementSibling.textContent.slice(0,-1) +' is required*'
             } else if (!image && btn_txt == 'ADD Product') {
                 pimg.style.border = '1px solid red';
+                alert.textContent = pimg.previousElementSibling.textContent.slice(0,-1) +' is required*'
             } else if (!price) {
                 pprice.style.border = '1px solid red';
+                alert.textContent = pprice.previousElementSibling.textContent.slice(0,-1) +' is required*'
             } else if (!description) {
                 pdesc.style.border = '1px solid red';
+                alert.textContent = pdesc.previousElementSibling.textContent.slice(0,-1) +' is required*'
             } else {
                 return true;
             }
