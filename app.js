@@ -248,6 +248,10 @@ const products_toggle = () => {
             if (!productId) {
                 pid.style.border = '1px solid red';
                 alert.textContent = pid.previousElementSibling.textContent.slice(0,-1) +' is required*'
+            }else if(pid.value < 0 || pid.value.includes('.')){
+                console.log(productId.value);
+                pid.style.border = '1px solid red';
+                alert.textContent = pid.previousElementSibling.textContent.slice(0,-1) +' must be positive integer'
             } else if (!productName) {
                 pname.style.border = '1px solid red';
                 alert.textContent = pname.previousElementSibling.textContent.slice(0,-1) +' is required*'
@@ -257,6 +261,9 @@ const products_toggle = () => {
             } else if (!price) {
                 pprice.style.border = '1px solid red';
                 alert.textContent = pprice.previousElementSibling.textContent.slice(0,-1) +' is required*'
+            }else if(pprice.value <= 0 || pprice.value.includes('.')){
+                pprice.style.border = '1px solid red';
+                alert.textContent = pprice.previousElementSibling.textContent.slice(0,-1) +' must be positive integer'
             } else if (!description) {
                 pdesc.style.border = '1px solid red';
                 alert.textContent = pdesc.previousElementSibling.textContent.slice(0,-1) +' is required*'
