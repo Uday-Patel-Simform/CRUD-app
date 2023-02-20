@@ -70,36 +70,36 @@ function update_product_list(product_list) {
     }
 }
 
-// let delete_button = document.querySelectorAll('.delete-button');
-// delete_button.forEach(button => {
-//     button.addEventListener('click', (e) => {
-//         let product_id = e.target.getAttribute('data-product-id');
-//         delete_product(product_id);
-//     });
-// });
-
 const home_functions = () => {
     update_product_list(product_list);
     // Delete a product from the product list
-    document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('delete-button')) {
-            let productId = event.target.getAttribute('data-product-id');
-            delete_product(productId);
-        }
-    });
+    let display_container = document.querySelector('.display-container');
+    if (display_container.querySelector('.product')) {
+        display_container.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-button')) {
+                if (confirm('Are you sure you want to delete this product??')) {
+                    let productId = event.target.getAttribute('data-product-id');
+                    delete_product(productId);
+                }
+            }
+            if (event.target.classList.contains('edit-button')) {
+                let productId = event.target.getAttribute('data-product-id');
+                localStorage.setItem('edit_product_id', JSON.stringify(productId));
+            }
+        })
+    }
 
     function delete_product(productId) {
         product_list.forEach(product => {
             if (product.productId === productId) {
                 product_list.splice(product_list.indexOf(product), 1);
+                localStorage.removeItem(productId);
             }
         });
         localStorage.setItem('product_list', JSON.stringify(product_list));
 
         update_product_list(product_list);
     }
-
-
     // Filter/Search product by ID
     let filter = document.querySelector('.filter');
     filter.addEventListener('input', (e) => {
@@ -141,13 +141,6 @@ const home_functions = () => {
     sort.forEach(item => item.addEventListener('click', (e) => {
         sort_products(e.target.textContent);
     }));
-
-    document.querySelectorAll('.edit-button').forEach(button => button.addEventListener('click', (event) => {
-        if (event.target.classList.contains('edit-button')) {
-            let productId = event.target.getAttribute('data-product-id');
-            localStorage.setItem('edit_product_id', JSON.stringify(productId));
-        }
-    }))
 }
 
 
@@ -175,15 +168,23 @@ const products_toggle = () => {
         pdesc.value = selected_product.description;
     }
     // update product in locale storage
-    const edit_product = (productId, product, image) => {
-        let product_index = product_list.findIndex(p => p.productId === productId);
-        product_list[product_index] = product;
-        if (!image) {
-        } else {
-            image_handler(product.productId, image);
-        }
+    const edit_product = (productId, product, image, e) => {
 
-        localStorage.setItem('product_list', JSON.stringify(product_list));
+        if (confirm('Update this product??')) {
+            let product_index = product_list.findIndex(p => p.productId === productId);
+            product_list[product_index] = product;
+            if (!image) {
+            } else {
+                image_handler(product.productId, image);
+            }
+            localStorage.setItem('product_list', JSON.stringify(product_list));
+            alert('Updated Successfully!!')
+            // form data reset on successful form submission
+            form_data.reset();
+            click_event = e || window.e;
+            window.history.pushState({}, '', click_event.target.href);
+            changeLocation();
+        }
     }
     // Handling image file
     const image_handler = (id, image) => {
@@ -204,13 +205,16 @@ const products_toggle = () => {
             }
         });
         if (ctr == 0) {
-            product_list.push(product);
-            localStorage.setItem('product_list', JSON.stringify(product_list));
-            image_handler(product.productId, image);
-            // form data reset on successful form submission
-            form_data.reset();
-            window.history.pushState({}, '', e.target.href);
-            changeLocation();
+            if (confirm('Add this to Products??')) {
+                product_list.push(product);
+                localStorage.setItem('product_list', JSON.stringify(product_list));
+                image_handler(product.productId, image);
+                alert('Added Successfully!!')
+                // form data reset on successful form submission
+                form_data.reset();
+                window.history.pushState({}, '', e.target.href);
+                changeLocation();
+            }
         }
     }
     // deciding button text based on page title
@@ -243,30 +247,30 @@ const products_toggle = () => {
 
         // checking for empty fields
         const check_empty = (btn_txt) => {
-            let alert= document.querySelector('.alert');
-            alert.style='color: red';
+            let alert = document.querySelector('.alert');
+            alert.style = 'color: red';
             if (!productId) {
                 pid.style.border = '1px solid red';
-                alert.textContent = pid.previousElementSibling.textContent.slice(0,-1) +' is required*'
-            }else if(pid.value < 0 || pid.value.includes('.')){
+                alert.textContent = pid.previousElementSibling.textContent.slice(0, -1) + ' is required*'
+            } else if (pid.value < 0 || pid.value.includes('.')) {
                 console.log(productId.value);
                 pid.style.border = '1px solid red';
-                alert.textContent = pid.previousElementSibling.textContent.slice(0,-1) +' must be positive integer'
+                alert.textContent = pid.previousElementSibling.textContent.slice(0, -1) + ' must be positive integer'
             } else if (!productName) {
                 pname.style.border = '1px solid red';
-                alert.textContent = pname.previousElementSibling.textContent.slice(0,-1) +' is required*'
+                alert.textContent = pname.previousElementSibling.textContent.slice(0, -1) + ' is required*'
             } else if (!image && btn_txt == 'ADD Product') {
                 pimg.style.border = '1px solid red';
-                alert.textContent = pimg.previousElementSibling.textContent.slice(0,-1) +' is required*'
+                alert.textContent = pimg.previousElementSibling.textContent.slice(0, -1) + ' is required*'
             } else if (!price) {
                 pprice.style.border = '1px solid red';
-                alert.textContent = pprice.previousElementSibling.textContent.slice(0,-1) +' is required*'
-            }else if(pprice.value <= 0 || pprice.value.includes('.')){
+                alert.textContent = pprice.previousElementSibling.textContent.slice(0, -1) + ' is required*'
+            } else if (pprice.value <= 0 || pprice.value.includes('.')) {
                 pprice.style.border = '1px solid red';
-                alert.textContent = pprice.previousElementSibling.textContent.slice(0,-1) +' must be positive integer'
+                alert.textContent = pprice.previousElementSibling.textContent.slice(0, -1) + ' must be positive integer'
             } else if (!description) {
                 pdesc.style.border = '1px solid red';
-                alert.textContent = pdesc.previousElementSibling.textContent.slice(0,-1) +' is required*'
+                alert.textContent = pdesc.previousElementSibling.textContent.slice(0, -1) + ' is required*'
             } else {
                 return true;
             }
@@ -279,13 +283,9 @@ const products_toggle = () => {
             }
 
         } else {
-            edit_product(productId, product, image);
             if (check_empty(f_button.textContent)) {
-                // form data reset on successful form submission
-                form_data.reset();
-                click_event = e || window.e;
-                window.history.pushState({}, '', click_event.target.href);
-                changeLocation();
+                edit_product(productId, product, image, e);
+                localStorage.removeItem('edit_product_id');
             }
         }
     });
