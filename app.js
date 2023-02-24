@@ -166,10 +166,10 @@ const products_toggle = () => {
         // pimg.value = selected_product.image;
         pprice.value = selected_product.price;
         pdesc.value = selected_product.description;
+        document.querySelector('.product-image-selected').src = localStorage.getItem(id);
     }
     // update product in locale storage
     const edit_product = (productId, product, image, e) => {
-
         if (confirm('Update this product??')) {
             let product_index = product_list.findIndex(p => p.productId === productId);
             product_list[product_index] = product;
@@ -194,7 +194,6 @@ const products_toggle = () => {
             localStorage.setItem(id, reader.result);
         });
     }
-
     // Add a product to the product list
     function add_product(product, e, image) {
         let ctr = 0;
@@ -289,4 +288,13 @@ const products_toggle = () => {
             }
         }
     });
+}
+
+//display selected image
+const display_img = (e) =>{
+    const reader = new FileReader();
+    reader.readAsDataURL(e.files[0]);
+    reader.onload = e => {
+        document.querySelector('.product-image-selected').src = reader.result;
+    }
 }
