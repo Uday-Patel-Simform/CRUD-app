@@ -14,7 +14,7 @@
         <div class="input-group d-flex flex-wrap w-100 justify-content-between">
             <div class="input mt-1 ">
                 <label for="image">Image:</label>
-                <input class="ip" type="file" id="p-image" name="image" accept="image/*">
+                <input class="ip" type="file" id="p-image" name="image" onchange = "display_img(this)" accept="image/*">
                 <!-- <input type="text" id="image" name="image"> -->
             </div>
             <div class="input mt-1">
@@ -28,6 +28,9 @@
         </div>
         <div class="mt-2 w-100 d-flex align-items-center justify-content-center">
             <p class="alert"></p>
+        </div>
+        <div class="mt-2 w-100 d-flex align-items-center justify-content-center">
+            <img src="" alt="" class="product-image-selected w-25">
         </div>
         <a type="submit" class="form-button mt-2" href="#home"></a>
     </form>
